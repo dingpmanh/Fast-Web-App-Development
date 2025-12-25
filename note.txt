@@ -1,0 +1,90 @@
+The basic idea behind JWT:
+* Front-end communicates with back-end through requests and back-end sends nack responses.
+* The back-end would like to know who is talkign to them and what kind of permissions the one
+  talking to them has.
+* That's when JWT comes into play.
+* When the user first logs in with their credentials, back-end gives them an Access Token and a
+  Refresh token.
+* Front-end stores these tokens and includes them whenever it sends later requests.
+* The access token will prove the identity of the sender, but it has short living time. This is
+  for situations where the token is leaked, and we want the access token to expire quickly, so 
+  the attacker cannot use the access token for long.
+* Refresh token has longer living time. When the access token has expired, it used to generate new
+  access token.
+* When the refresh token has expired, the user is required to log in again with their credentials.
+* In this way, the back-end can verify users without asking them to log in again and again.
+
+Django serializers:
+* Django uses ORM (Object Relational Mapping).
+* It maps Python objects to corresponding code that needs to be executed to make a change in the
+  databases.
+* In other words, when you create a class(model), a table is created in the database. When you created an
+  object, a row is created in the database. When you created an attribute, a column is created in
+  the database. So, in a way, ORM translates code/object to queries.
+* A serializer in Django REST Framework converts Python objects into JSON for responses, and 
+  converts incoming JSON into Python objects while validating the data.
+
+API models:
+* They define what data exists and how they are stored.
+* They define the structure of the data, including fields and their types.
+* So, when we created a model, it's like we have created a table in the database
+
+API views:
+* They are back-end endpoints that define how the server reacts to HTTP requests. (they are logic)
+* TokenObtainPairView and TokenRefreshView are built-in view that we can use right away.
+
+Relation between models - views - serializers:
+* For requests:
+Client (JSON)
+   ↓
+View (API endpoint)
+   ↓
+Serializer (validate + translate)
+   ↓
+Model (save/query DB)
+* For responses:
+Model (query DB)
+   ↓
+Serializer (translate)
+   ↓
+View (API endpoint)
+   ↓
+Client (JSON)
+* We create the thing (model) -> translate it to JSON and vice versa(serilizer) -> create what
+  action we can do to the thing or how it behaves (view)
+
+
+Creation of databases steps:
+* In terminal, first command: python manage.py makemigrations
+* This command will detect changes in the models.py (new model, new field, removed fiels etc.) and
+  generate migration files. These files are python code that describes the plan of what to change
+  in the database.--> Can think the command as: Write down instructions for how the DB should change
+* Second command: python manage.py migrate
+* This command applies migrations to the database. What it does: reads the migration files, executes
+  SQL, creates/updates tables, records applied migrations in django_migrations table
+
+Run server command: python manage.py runserver
+
+=====================================
+
+Access token and refresh token is saved in local storage of the browser.
+
+Axios:
+* Axios is a popular HTTP client library for making requests. It checks if there is an access
+  token stored in the local storage of the browser. If there is, it adds the token to request 
+  headers.
+* This way, we don't have to manually add tokens everytime we make a request.
+
+JSX:
+* JSX stands for JavaScript XML. JSX allows us to write HTML in React. JSX makes it easier to write
+  and add HTML in React.
+
+Route vs. Endpoint:
+* Usually is interchangeable.
+* Route: Rule in server that says: when this URL + HTTP method is requested, run this code.
+  Example: path("api/tasks/", TaskListView.as_view())
+    URL path: /api/tasks/
+    Method(s): GET, POST
+    Handler: TaskListView
+* Endpoint: The exposed API location that a client can call to perform an action.
+  Example: GET /api/tasks/  -->  Retrieve a list of tasks
